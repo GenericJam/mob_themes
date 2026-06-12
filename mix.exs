@@ -11,6 +11,10 @@ defmodule MobThemes.MixProject do
       deps: deps(),
       description: "Mob's default theme collection — five token-only looks in one style package",
       package: package(),
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ],
       source_url: @source_url
     ]
   end
@@ -28,6 +32,7 @@ defmodule MobThemes.MixProject do
       {:mob_dev, path: "../mob_dev", only: [:dev, :test], runtime: false},
       # Code quality — Credo + ex_slop (AI-pattern checks) + jump_credo_checks,
       # mirroring mob core's pre-commit gate.
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:ex_slop, "~> 0.4.2", only: [:dev, :test], runtime: false},
       {:jump_credo_checks, "~> 0.1.0", only: [:dev, :test], runtime: false}
