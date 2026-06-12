@@ -1,15 +1,15 @@
-defmodule MobThemeCitrus.MixProject do
+defmodule MobThemes.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/GenericJam/mob_theme_citrus"
+  @source_url "https://github.com/GenericJam/mob_themes"
 
   def project do
     [
-      app: :mob_theme_citrus,
+      app: :mob_themes,
       version: "0.1.0",
       elixir: "~> 1.17",
       deps: deps(),
-      description: "Citrus theme for Mob — token-only style package (warm charcoal, lime accent)",
+      description: "Mob's default theme collection — five token-only looks in one style package",
       package: package(),
       source_url: @source_url
     ]

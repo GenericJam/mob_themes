@@ -1,8 +1,8 @@
-defmodule MobThemeCitrus.Theme do
+defmodule MobThemes.Citrus do
   @moduledoc """
   Citrus theme for Mob — warm charcoal with a lime-green accent. The first
   token-only STYLE PACKAGE (MOB_STYLES.md lane), extracted from mob core's
-  `Mob.Theme.Citrus` in Wave 4.
+  `MobThemes.Citrus` in Wave 4.
 
   High-contrast and energetic. Works well for utility apps, dashboards,
   and anywhere you want punchy, readable UI with an earthy warmth.
@@ -17,9 +17,9 @@ defmodule MobThemeCitrus.Theme do
 
   ## Direct use (any theme module works anywhere a theme is accepted)
 
-      use Mob.App, theme: MobThemeCitrus.Theme
-      Mob.Theme.set(MobThemeCitrus.Theme)
-      Mob.Theme.set({MobThemeCitrus.Theme, primary: :lime_300})
+      use Mob.App, theme: MobThemes.Citrus
+      Mob.Theme.set(MobThemes.Citrus)
+      Mob.Theme.set({MobThemes.Citrus, primary: :lime_300})
   """
 
   @doc "Returns the compiled Citrus theme struct."

@@ -1,10 +1,13 @@
 %{
-  name: :mob_theme_citrus,
+  name: :mob_themes,
   mob_version: "~> 0.6",
   style_spec_version: 1,
-  description: "Citrus — warm charcoal with a lime-green accent (token-only)",
-  # Tokens only: the baseline native primitives render with this palette.
-  # (The native-override tier — custom per-component views — is the mob_m3
-  # case and a different style_spec surface.)
-  theme: MobThemeCitrus.Theme
+  description:
+    "Mob's default theme collection — Obsidian (default), ObsidianGlass, Citrus, " <>
+      "Birch, Material3 (all token-only)",
+  # The boot default; the other four are one Mob.Theme.set/1 away
+  # (see MobThemes.all/0). A richer multi-theme manifest shape (named
+  # variants selectable via :default_style) can come later without breaking
+  # this four-field minimum.
+  theme: MobThemes.Obsidian
 }
