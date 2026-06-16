@@ -9,6 +9,7 @@ defmodule MobThemes.MixProject do
       version: "0.1.0",
       elixir: "~> 1.17",
       deps: deps(),
+      aliases: aliases(),
       description: "Mob's default theme collection — five token-only looks in one style package",
       package: package(),
       docs: [
@@ -21,6 +22,13 @@ defmodule MobThemes.MixProject do
 
   def application do
     [extra_applications: []]
+  end
+
+  defp aliases do
+    # `mix setup` after cloning installs deps and activates the shared git
+    # hooks (.githooks): format / Credo --strict / compile run on every push
+    # and the full suite when mix.exs changes — the same gate CI enforces.
+    [setup: ["deps.get", "cmd git config core.hooksPath .githooks"]]
   end
 
   defp deps do
