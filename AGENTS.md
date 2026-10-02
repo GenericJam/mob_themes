@@ -1,6 +1,6 @@
-# AGENTS.md — orientation for AI agents working on mob_themes
+# mob_themes — Agent Instructions
 
-You're in **mob_themes**, a Mob **style-package**: one package, five preset visual looks. Obsidian (deep-violet dark, the boot default), ObsidianGlass (obsidian with translucent depth), Citrus (warm charcoal with lime accent), Birch (light, paper-warm), and Material3 (M3 baseline palette). All five are token-only — they set the palette / typography tokens that `mob_mishka` and core widgets read; they do not ship components.
+You're in **mob_themes**, a Mob **style-package**: one package, five preset visual looks. Obsidian (deep-violet dark, the boot default), ObsidianGlass (obsidian with translucent depth), Citrus (warm charcoal with lime accent), Birch (light, paper-warm), and Material3 (M3 baseline palette). All five are token-only — they set the palette / typography tokens that `mob_mishka` and core widgets read; they do not ship components. The token-only tier of the MOB_STYLES.md lane.
 
 **Also read [`~/code/mob/AGENTS.md`](../mob/AGENTS.md)** and **`~/code/mob/MOB_STYLES.md`** for the style-manifest schema, tier structure, and how `Mob.Theme.build/1` composes tokens. This file is mob_themes-specific.
 
@@ -62,17 +62,47 @@ Confirm each renders without color-token warnings and that overrides via `{modul
 3. **Keep the four-field manifest minimum.** The style-spec-v1 shape is deliberately small. Extra fields will validate today but lock in shape before mob core has decided on richer variants.
 4. **Every theme sets the same token set.** `all/0` themes must be interchangeable at `Mob.Theme.set/1`. Missing a token that a widget reads is a silent breakage — grep `mob_mishka` + mob core for token consumers before shipping a new theme.
 
-## Pre-commit + release
+## Pre-commit checklist
 
-Standard mob gate (pure Elixir — no zig / clang-format):
+Standard mob gate (pure Elixir — no zig / clang-format). Before committing, run all in this order:
 
 ```bash
 mix format
-mix credo --strict
+mix credo --strict                  # includes ExSlop + jump_credo_checks
 mix compile --warnings-as-errors
 mix test
 ```
 
-Activate the pre-push hook once per clone: `git config core.hooksPath .githooks`. Pre-push runs format / credo strict / compile on every push and the full suite when `mix.exs` changes.
+Pre-push hook (`.githooks/pre-push`) runs format / credo strict / compile on every push and the full suite when `mix.exs` changes. Activate once per clone:
 
-Release = `mix.exs` `@version` bump on master. GH Actions handles tag + GitHub release + Hex publish, signed with the shared mob first-party key. Do NOT bump without explicit permission.
+```bash
+git config core.hooksPath .githooks
+```
+
+Pure-Elixir package — no native code to check, no device build required for merge. Visual verification is still worth doing: install into a host, `config :mob, :styles, [:mob_themes]`, `Mob.Theme.set/1` through all five and confirm each renders without missing-token warnings (see Testing).
+
+### Tests are part of the change
+
+For mob_themes specifically:
+
+* Adding a theme = adding a test that asserts `theme/0` returns a `Mob.Theme.t()` with every token the token set expects, plus adding it to `MobThemes.all/0`.
+* Retuning a palette = the change is usually small enough that a test would only restate it; visual diff on a host is the real signal.
+* Any manifest change to `priv/mob_style.exs` needs a validator test — the four-field minimum is deliberate.
+
+### Adversarial review — before every non-trivial commit
+
+Spawn a subagent, point it at the diff. Especially:
+
+* **Missing tokens.** Did you drop a token a widget in mob_mishka or mob core reads? Grep for token names in both repos before shipping a new theme.
+* **Style-package vs plugin drift.** If a change wants to put something under `config :mob, :plugins` or `priv/mob_plugin.exs`, it's in the wrong repo — themes are `:styles` + `priv/mob_style.exs`.
+* **Material3 over-promise.** Material3 in this package is the token-only baseline; do not claim pixel-perfect M3.
+
+Skip only for: formatting, a typo, a version bump.
+
+## Release flow
+
+Canonical process in [`~/code/mob/RELEASE.md`](../mob/RELEASE.md). mob_themes specifics:
+
+* `@version` in `mix.exs` is the trigger. Push to master, GH Actions handles tag / GitHub release / Hex publish, signed with the shared mob first-party key.
+* Do NOT bump without explicit permission.
+* Hot-pushable, no device rebuild needed — but visual verification on both light and dark theme against a real host before bumping is still the right call.
